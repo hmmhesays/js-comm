@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* use viewport-relative units to cover page fully */
+body {
+  height: 100vh;
+  width: calc(100vw - (100vw - 100%));
+  
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+}
+
+/* include border and padding in element width and height */
+* {
+  box-sizing: border-box;
+}
+
+/* full-sized  container that fills up the page */
+.container {
+  height: 100%;
+  width: 30%;
+  position: relative;
+  /* example padding, font-size, background, etc */
+  padding: 10px;
+  font-size: 20px;
+  background-color: lightskyblue;
+}
+
+.conversation-window {
+    height: 93%;
+    background-color: yellow;
+    overflow-y: auto;
+    flex-wrap: wrap;
+}
+
+.input-window {
+    height: 7%;
+    display: flex;
+    background-color: red;
+
+}
+.input-element {
+    height: 100%;
+    width: 80%;
+    background-color: blue;
+    
+}
+
+.input-controls {
+    height: 100%;
+    width: 20%;
+    background-color:rgb(255, 145, 0);
+    
+}
+    </style>
+    <script>
+        h1 = 93;
+        h2 = 7;
+        let c_win, i_win;
+        let element;
+        window.onload = (event) => {
+        c_win = document.getElementById('conversation_window');
+        i_win = document.getElementById('input_window');
+
+        document.getElementById('input_element').addEventListener('input', function(e) {
+            element = e.target;
+            console.log(e);
+            console.log('Height: ' + element.clientHeight + " ScrollHeight: " +  element.scrollHeight);
+            console.log(element.scrollHeight > element.clientHeight);
+            handle_input();
+        });
+        }
+
+        function handle_input() {
+            if(element.scrollHeight > element.clientHeight) {
+
+            console.log('Re-rendering');
+            h1 = h1-1;
+            h2 = h2+1;
+            
+            c_win.style.height = h1 + '%'
+            i_win.style.height = h2 + '%';
+            
+            handle_input();
+            
+            } else if (element.scrollHeight == element.clientHeight && (h1 < 93)) {
+                while(h1 < 95) {
+                    console.log(`Reducing size from ${h1} ${h2}`)
+                    h1 = h1+1;
+                    h2 = h2-1;
+                    c_win.style.height = h1 + '%'
+                    i_win.style.height = h2 + '%';
+
+                    if(element.scrollHeight > element.clientHeight) {
+                        h1 = h1-1;
+                        h2 = h2+1;
+                        c_win.style.height = h1 + '%'
+                        i_win.style.height = h2 + '%';
+                        break;
+                    }
+                    
+                }
+                
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container" style="display: flex; flex-direction: column">
+        <div id="conversation_window" class="conversation-window"></div>
+        <div id="input_window" class="input-window">
+            <div id="input_element" class="input-element" contenteditable="true">
+                <textarea style="resize: none; height: 100%; width: 100%">test</textarea>
+            </div>
+            <div id="input_controls" class="input-controls"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/>
+              </svg></div>
+        </div>
+    </div>
+</body>
+</html>
